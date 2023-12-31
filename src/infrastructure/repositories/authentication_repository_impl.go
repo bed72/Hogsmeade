@@ -3,12 +3,14 @@ package repositories
 import (
 	"encoding/json"
 
+	models "github.com/bed72/oohferta/src/data/models/requests"
 	"github.com/bed72/oohferta/src/domain/entities"
+	"github.com/bed72/oohferta/src/domain/paths"
 	"github.com/go-resty/resty/v2"
 )
 
 type AuthenticationRepository interface {
-	SignIn(email string, password string) (*entities.AuthenticationEntity, *entities.FailureEntity, error)
+	SignIn(body models.SignUpRequestModel) (*entities.AuthenticationEntity, *entities.FailureEntity, error)
 }
 
 type authenticationRepository struct {
@@ -21,17 +23,14 @@ func New(request *resty.Request) AuthenticationRepository {
 	}
 }
 
-func (repository *authenticationRepository) SignIn(email string, password string) (*entities.AuthenticationEntity, *entities.FailureEntity, error) {
-	response, err := repository.
-		request.
-		SetBody(map[string]interface{}{"email": email, "password": password}).
-		Post("https://naiwfnrkbtsmzllsvmxj.supabase.co/auth/v1/token?grant_type=password")
+func (repository *authenticationRepository) SignIn(body models.SignUpRequestModel) (*entities.AuthenticationEntity, *entities.FailureEntity, error) {
+	response, err := repository.request.SetBody(body).Post(paths.SIGN_IN)
 
 	if err != nil {
 		return nil, nil, err
 	}
 
-	if response.StatusCode() >= 200 && response.StatusCode() <= 201 {
+	if response.StatusCode() >= paths.StatusOK && response.StatusCode() <= paths.StatusCreated {
 		var data entities.AuthenticationEntity
 
 		if err := json.Unmarshal(response.Body(), &data); err != nil {

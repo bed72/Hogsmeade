@@ -18,7 +18,8 @@ func main() {
 	configurations.EnvConfiguration()
 	configurations.FiberMiddwaresConfiguration(app)
 
-	request := resty.New().R().SetHeader("apiKey", configurations.GetEnv("SUPABASE_KEY"))
+	request := resty.New().R().SetHeader("apiKey", configurations.GetEnv("SUPABASE_KEY")).SetDoNotParseResponse(true)
+
 	validator := validators.New(v.New())
 	repository := repositories.New(request)
 	handler := handlers.New(validator, repository)

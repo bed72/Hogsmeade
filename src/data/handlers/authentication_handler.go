@@ -43,7 +43,7 @@ func (h *authenticationHandler) SignIn(ctx *fiber.Ctx) error {
 		}
 	}
 
-	success, failure, err := h.repository.SignIn(body.Email, body.Password)
+	success, failure, err := h.repository.SignIn(*body)
 
 	if failure != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(failure)

@@ -41,11 +41,8 @@ func (v *validators) HasErrors(data interface{}) []string {
 
 		for _, err := range errs {
 			messages = append(messages, fmt.Sprintf(
-				"[%s]: '%v' preencha um(a) '%s' válido(a) - ['%s'].",
+				"Preencha um(a) %s válido(a).",
 				err.FailedField,
-				err.Value,
-				err.FailedField,
-				err.Tag,
 			))
 		}
 
