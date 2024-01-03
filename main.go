@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/bed72/oohferta/src/application/configurations"
 	"github.com/bed72/oohferta/src/application/routes"
 	"github.com/gofiber/fiber/v2"
@@ -13,7 +15,10 @@ func main() {
 	configurations.EnvConfiguration()
 	configurations.FiberMiddwaresConfiguration(app)
 
-	routes.Routes(v1) //(v1, handler)
+	routes.Routes(v1)
 
-	app.Listen(configurations.GetEnv("PORT"))
+	err := app.Listen(configurations.GetEnv("PORT"))
+	if err != nil {
+		log.Panic(err)
+	}
 }

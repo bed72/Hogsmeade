@@ -3,7 +3,6 @@ package handlers_test
 import (
 	"testing"
 
-	models "github.com/bed72/oohferta/src/data/models/requests"
 	. "github.com/bed72/oohferta/src/domain/constants"
 	"github.com/bed72/oohferta/src/infrastructure/clients"
 	"github.com/bed72/oohferta/src/infrastructure/repositories"
@@ -14,31 +13,29 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var clientmock = resty.New()
-
 type request struct {
 	key   string
 	value string
 }
 
 func (r *request) Request() *resty.Request {
-	return clientmock.R()
+	return RequestMock
 }
 
-func TestAuthentication(t *testing.T) {
+func TestAuthenticationRepository(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Authentication Suite")
+	RunSpecs(t, "Authentication Repository Suite")
 }
 
 var _ = BeforeSuite(func() {
-	httpmock.ActivateNonDefault(clientmock.GetClient())
+	httpmock.ActivateNonDefault(ClientMock.GetClient())
 })
 
 var _ = AfterSuite(func() {
 	httpmock.Deactivate()
 })
 
-var _ = Describe("Authentication", func() {
+var _ = Describe("Authentication Repository", func() {
 	var requestmock clients.RequestClient
 	var repository repositories.AuthenticationRepository
 
@@ -52,12 +49,11 @@ var _ = Describe("Authentication", func() {
 		repository = repositories.New(requestmock)
 	})
 
-	Context("Should validate the Sign In repository return", func() {
+	Context("Should validate the sign in return", func() {
 		It("With succefful return", func() {
 			ResponderMock(StatusOK, SIGN_IN_URL, "authentication_success", MethodPost)
-			body := models.SignUpRequestModel{Email: "succes_mock@email.com", Password: "P@sSw0rD"}
 
-			success, failure, err := repository.SignIn(SIGN_IN_URL, body)
+			success, failure, err := repository.SignIn(SIGN_IN_URL, BodyMock)
 
 			Expect(err).To(BeNil())
 			Expect(failure).To(BeNil())
@@ -71,9 +67,8 @@ var _ = Describe("Authentication", func() {
 		})
 		It("With failure return", func() {
 			ResponderMock(StatusBadRequest, SIGN_IN_URL, "authentication_failure", MethodPost)
-			body := models.SignUpRequestModel{Email: "failure_mock@email.com", Password: "P@sSw0rD"}
 
-			success, failure, err := repository.SignIn(SIGN_IN_URL, body)
+			success, failure, err := repository.SignIn(SIGN_IN_URL, BodyMock)
 
 			Expect(err).To(BeNil())
 			Expect(success).To(BeNil())
