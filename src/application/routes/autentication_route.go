@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/bed72/oohferta/src/infrastructure/configurations"
+	"github.com/bed72/oohferta/src/application/configurations"
 	"github.com/gofiber/fiber/v2"
 )
 

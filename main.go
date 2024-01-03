@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/bed72/oohferta/src/infrastructure/configurations"
-	"github.com/bed72/oohferta/src/infrastructure/routes"
+	"github.com/bed72/oohferta/src/application/configurations"
+	"github.com/bed72/oohferta/src/application/routes"
 	"github.com/gofiber/fiber/v2"
 )
 

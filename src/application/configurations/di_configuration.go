@@ -1,19 +1,19 @@
 package configurations
 
 import (
-	"github.com/bed72/oohferta/src/data/handlers"
+	"github.com/bed72/oohferta/src/application/handlers"
 	"github.com/bed72/oohferta/src/data/validators"
+	"github.com/bed72/oohferta/src/infrastructure/clients"
 	"github.com/bed72/oohferta/src/infrastructure/repositories"
 	"github.com/go-playground/validator/v10"
-	"github.com/go-resty/resty/v2"
 )
 
 func validatorDIConfiguration() validators.Validator {
 	return validators.New(validator.New())
 }
 
-func requestDIConfiguration() *resty.Request {
-	return resty.New().R().SetHeader("apiKey", GetEnv("SUPABASE_KEY"))
+func requestDIConfiguration() clients.RequestClient {
+	return clients.New("apiKey", GetEnv("SUPABASE_KEY"))
 }
 
 func SignInDIConfiguration() handlers.AuthenticationHandler {

@@ -1,12 +1,26 @@
-package paths
+package constants
 
 const (
-	LOGOUT        = "https://naiwfnrkbtsmzllsvmxj.supabase.co/auth/v1/logout"
-	GET_USER      = "https://naiwfnrkbtsmzllsvmxj.supabase.co/auth/v1/user"
-	SIGN_UP       = "https://naiwfnrkbtsmzllsvmxj.supabase.co/auth/v1/signup"
-	SIGN_IN       = "https://naiwfnrkbtsmzllsvmxj.supabase.co/auth/v1/token?grant_type=password"
-	USER_IMAGES   = "https://naiwfnrkbtsmzllsvmxj.supabase.co/storage/v1/object/images/users/"
-	REFRESH_TOKEN = "https://naiwfnrkbtsmzllsvmxj.supabase.co/auth/v1/token?grant_type=refresh_token"
+	LOGOUT_URL        = "https://naiwfnrkbtsmzllsvmxj.supabase.co/auth/v1/logout"
+	GET_USER_URL      = "https://naiwfnrkbtsmzllsvmxj.supabase.co/auth/v1/user"
+	SIGN_UP_URL       = "https://naiwfnrkbtsmzllsvmxj.supabase.co/auth/v1/signup"
+	SIGN_IN_URL       = "https://naiwfnrkbtsmzllsvmxj.supabase.co/auth/v1/token?grant_type=password"
+	USER_IMAGES_URL   = "https://naiwfnrkbtsmzllsvmxj.supabase.co/storage/v1/object/images/users/"
+	REFRESH_TOKEN_URL = "https://naiwfnrkbtsmzllsvmxj.supabase.co/auth/v1/token?grant_type=refresh_token"
+)
+
+// HTTP methods were copied from net/http.
+const (
+	MethodGet     = "GET"     // RFC 7231, 4.3.1
+	MethodHead    = "HEAD"    // RFC 7231, 4.3.2
+	MethodPost    = "POST"    // RFC 7231, 4.3.3
+	MethodPut     = "PUT"     // RFC 7231, 4.3.4
+	MethodPatch   = "PATCH"   // RFC 5789
+	MethodDelete  = "DELETE"  // RFC 7231, 4.3.5
+	MethodConnect = "CONNECT" // RFC 7231, 4.3.6
+	MethodOptions = "OPTIONS" // RFC 7231, 4.3.7
+	MethodTrace   = "TRACE"   // RFC 7231, 4.3.8
+	methodUse     = "USE"
 )
 
 const (

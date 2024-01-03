@@ -4,33 +4,33 @@ import (
 	"encoding/json"
 
 	models "github.com/bed72/oohferta/src/data/models/requests"
+	"github.com/bed72/oohferta/src/domain/constants"
 	"github.com/bed72/oohferta/src/domain/entities"
-	"github.com/bed72/oohferta/src/domain/paths"
-	"github.com/go-resty/resty/v2"
+	"github.com/bed72/oohferta/src/infrastructure/clients"
 )
 
 type AuthenticationRepository interface {
-	SignIn(body models.SignUpRequestModel) (*entities.AuthenticationEntity, *entities.FailureEntity, error)
+	SignIn(path string, body models.SignUpRequestModel) (*entities.AuthenticationEntity, *entities.FailureEntity, error)
 }
 
 type authenticationRepository struct {
-	request *resty.Request
+	request clients.RequestClient
 }
 
-func New(request *resty.Request) AuthenticationRepository {
+func New(request clients.RequestClient) AuthenticationRepository {
 	return &authenticationRepository{
 		request: request,
 	}
 }
 
-func (repository *authenticationRepository) SignIn(body models.SignUpRequestModel) (*entities.AuthenticationEntity, *entities.FailureEntity, error) {
-	response, err := repository.request.SetBody(body).Post(paths.SIGN_IN)
+func (r *authenticationRepository) SignIn(url string, body models.SignUpRequestModel) (*entities.AuthenticationEntity, *entities.FailureEntity, error) {
+	response, err := r.request.Request().SetBody(body).Post(url)
 
 	if err != nil {
 		return nil, nil, err
 	}
 
-	if response.StatusCode() >= paths.StatusOK && response.StatusCode() <= paths.StatusCreated {
+	if response.StatusCode() >= constants.StatusOK && response.StatusCode() <= constants.StatusCreated {
 		var data entities.AuthenticationEntity
 
 		if err := json.Unmarshal(response.Body(), &data); err != nil {
@@ -47,5 +47,4 @@ func (repository *authenticationRepository) SignIn(body models.SignUpRequestMode
 
 		return nil, &data, nil
 	}
-
 }

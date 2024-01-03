@@ -5,6 +5,7 @@ import (
 
 	models "github.com/bed72/oohferta/src/data/models/requests"
 	"github.com/bed72/oohferta/src/data/validators"
+	"github.com/bed72/oohferta/src/domain/constants"
 	"github.com/bed72/oohferta/src/infrastructure/repositories"
 	"github.com/gofiber/fiber/v2"
 )
@@ -39,11 +40,11 @@ func (h *authenticationHandler) SignIn(ctx *fiber.Ctx) error {
 	if failures != nil {
 		return &fiber.Error{
 			Code:    fiber.ErrUnprocessableEntity.Code,
-			Message: strings.Join(failures, " "),
+			Message: strings.Join(failures, ""),
 		}
 	}
 
-	success, failure, err := h.repository.SignIn(*body)
+	success, failure, err := h.repository.SignIn(constants.SIGN_IN_URL, *body)
 
 	if failure != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(failure)
