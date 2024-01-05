@@ -3,14 +3,14 @@ package repositories
 import (
 	"encoding/json"
 
-	models "github.com/bed72/oohferta/src/data/models/requests"
+	"github.com/bed72/oohferta/src/data/models/requests"
 	"github.com/bed72/oohferta/src/domain/constants"
 	"github.com/bed72/oohferta/src/domain/entities"
 	"github.com/bed72/oohferta/src/infrastructure/clients"
 )
 
 type AuthenticationRepository interface {
-	SignIn(path string, body models.SignUpRequestModel) (*entities.AuthenticationEntity, *entities.FailureEntity, error)
+	SignIn(path string, body requests.SignUpRequestModel) (*entities.AuthenticationEntity, *entities.ErrorEntity, error)
 }
 
 type authenticationRepository struct {
@@ -23,7 +23,7 @@ func New(request clients.RequestClient) AuthenticationRepository {
 	}
 }
 
-func (r *authenticationRepository) SignIn(url string, body models.SignUpRequestModel) (*entities.AuthenticationEntity, *entities.FailureEntity, error) {
+func (r *authenticationRepository) SignIn(url string, body requests.SignUpRequestModel) (*entities.AuthenticationEntity, *entities.ErrorEntity, error) {
 	response, err := r.request.Request().SetBody(body).Post(url)
 
 	if err != nil {
@@ -39,7 +39,7 @@ func (r *authenticationRepository) SignIn(url string, body models.SignUpRequestM
 
 		return &data, nil, nil
 	} else {
-		var data entities.FailureEntity
+		var data entities.ErrorEntity
 
 		if err := json.Unmarshal(response.Body(), &data); err != nil {
 			return nil, nil, err

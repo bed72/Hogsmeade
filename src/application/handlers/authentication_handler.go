@@ -1,9 +1,8 @@
 package handlers
 
 import (
-	"strings"
-
-	models "github.com/bed72/oohferta/src/data/models/requests"
+	"github.com/bed72/oohferta/src/data/mappers"
+	"github.com/bed72/oohferta/src/data/models/requests"
 	"github.com/bed72/oohferta/src/data/validators"
 	"github.com/bed72/oohferta/src/domain/constants"
 	"github.com/bed72/oohferta/src/infrastructure/repositories"
@@ -30,29 +29,24 @@ func New(
 }
 
 func (h *authenticationHandler) SignIn(ctx *fiber.Ctx) error {
-	body := &models.SignUpRequestModel{}
+	body := &requests.SignUpRequestModel{}
 
 	if err := ctx.BodyParser(body); err != nil {
-		return ctx.Status(fiber.StatusUnprocessableEntity).JSON(err.Error())
+		return ErrorHandler(ctx, constants.StatusBadRequest, mappers.ErrorDefaultMapper(err))
 	}
 
-	failures := h.validator.HasErrors(body)
-	if failures != nil {
-		return &fiber.Error{
-			Code:    fiber.ErrUnprocessableEntity.Code,
-			Message: strings.Join(failures, ""),
-		}
+	errs := h.validator.HasErrors(body)
+	if errs != nil {
+		return ErrorsHandler(ctx, constants.StatusUnprocessableEntity, mappers.ErrorsMapper(errs))
 	}
 
 	success, failure, err := h.repository.SignIn(constants.SIGN_IN_URL, *body)
-
 	if failure != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(failure)
+		return ErrorHandler(ctx, constants.StatusBadRequest, mappers.ErrorMapper(failure))
 	}
-
 	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(err.Error())
+		return ErrorHandler(ctx, constants.StatusBadRequest, mappers.ErrorDefaultMapper(err))
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(success)
+	return SuccessHandler(ctx, constants.StatusOK, mappers.SignInMapper(success))
 }

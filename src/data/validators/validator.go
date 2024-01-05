@@ -3,29 +3,18 @@ package validators
 import (
 	"fmt"
 
+	"github.com/bed72/oohferta/src/data/models/responses"
 	"github.com/go-playground/validator/v10"
 )
 
 type (
 	Validator interface {
-		HasErrors(data interface{}) []string
-		validate(data interface{}) []FailureResponse
+		HasErrors(data interface{}) []responses.ErrorResponseModel
+		validate(data interface{}) []responses.ValidatorResponseModel
 	}
 
 	validators struct {
 		validator *validator.Validate
-	}
-
-	FailureResponse struct {
-		Failure     bool
-		FailedField string
-		Tag         string
-		Value       interface{}
-	}
-
-	GlobalFailureHandlerResponse struct {
-		Success  bool     `json:"success"`
-		Messages []string `json:"messages"`
 	}
 )
 
@@ -35,36 +24,37 @@ func New(validator *validator.Validate) Validator {
 	}
 }
 
-func (v *validators) HasErrors(data interface{}) []string {
+func (v *validators) HasErrors(data interface{}) []responses.ErrorResponseModel {
 	if errs := v.validate(data); len(errs) > 0 && errs[0].Failure {
-		messages := make([]string, 0)
+		errors := make([]responses.ErrorResponseModel, 0)
 
 		for _, err := range errs {
-			messages = append(messages, fmt.Sprintf(
-				"Preencha um(a) %s válido(a).",
-				err.FailedField,
-			))
+			errors = append(
+				errors,
+				responses.ErrorResponseModel{
+					Message:     fmt.Sprintf("O campo %s não é válido.", err.FailedField),
+					Description: fmt.Sprintf("A validação: [%s] não foi atendida.", err.Tag),
+				},
+			)
 		}
 
-		return messages
-
+		return errors
 	}
 
 	return nil
 }
 
-func (v *validators) validate(data interface{}) []FailureResponse {
-	validators := []FailureResponse{}
+func (v *validators) validate(data interface{}) []responses.ValidatorResponseModel {
+	validators := []responses.ValidatorResponseModel{}
 	failures := v.validator.Struct(data)
 
 	if failures != nil {
 		for _, err := range failures.(validator.ValidationErrors) {
-			var element FailureResponse
-
-			element.FailedField = err.Field()
+			var element responses.ValidatorResponseModel
+			element.Failure = true
 			element.Tag = err.Tag()
 			element.Value = err.Value()
-			element.Failure = true
+			element.FailedField = err.Field()
 
 			validators = append(validators, element)
 		}
