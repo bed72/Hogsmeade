@@ -32,17 +32,17 @@ func (h *authenticationHandler) SignIn(ctx *fiber.Ctx) error {
 	body := &requests.SignUpRequestModel{}
 
 	if err := ctx.BodyParser(body); err != nil {
-		return ErrorHandler(ctx, constants.StatusBadRequest, mappers.ErrorDefaultMapper(err))
+		return ErrorHandler(ctx, constants.StatusUnprocessableEntity, mappers.ErrorDefaultMapper(err))
 	}
 
 	errs := h.validator.HasErrors(body)
 	if errs != nil {
-		return ErrorsHandler(ctx, constants.StatusUnprocessableEntity, mappers.ErrorsMapper(errs))
+		return ErrorHandler(ctx, constants.StatusUnprocessableEntity, mappers.ErrorsMapper(errs))
 	}
 
-	success, failure, err := h.repository.SignIn(constants.SIGN_IN_URL, *body)
-	if failure != nil {
-		return ErrorHandler(ctx, constants.StatusBadRequest, mappers.ErrorMapper(failure))
+	success, error, err := h.repository.SignIn(constants.SIGN_IN_URL, *body)
+	if error != nil {
+		return ErrorHandler(ctx, constants.StatusBadRequest, mappers.ErrorMapper(error))
 	}
 	if err != nil {
 		return ErrorHandler(ctx, constants.StatusBadRequest, mappers.ErrorDefaultMapper(err))

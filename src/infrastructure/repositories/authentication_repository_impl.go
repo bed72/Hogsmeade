@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 
 	"github.com/bed72/oohferta/src/data/models/requests"
-	"github.com/bed72/oohferta/src/domain/constants"
 	"github.com/bed72/oohferta/src/domain/entities"
 	"github.com/bed72/oohferta/src/infrastructure/clients"
 )
@@ -30,21 +29,23 @@ func (r *authenticationRepository) SignIn(url string, body requests.SignUpReques
 		return nil, nil, err
 	}
 
-	if response.StatusCode() >= constants.StatusOK && response.StatusCode() <= constants.StatusCreated {
+	if HasSuccessfulBody(response.StatusCode()) {
 		var data entities.AuthenticationEntity
-
 		if err := json.Unmarshal(response.Body(), &data); err != nil {
 			return nil, nil, err
 		}
 
 		return &data, nil, nil
-	} else {
-		var data entities.ErrorEntity
+	}
 
+	if HasErrorBody(response.StatusCode()) {
+		var data entities.ErrorEntity
 		if err := json.Unmarshal(response.Body(), &data); err != nil {
 			return nil, nil, err
 		}
 
 		return nil, &data, nil
 	}
+
+	return nil, &entities.ErrorEntity{}, nil
 }

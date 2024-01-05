@@ -5,8 +5,8 @@ import (
 	"github.com/bed72/oohferta/src/domain/entities"
 )
 
-func SignInMapper(data *entities.AuthenticationEntity) responses.Response {
-	return responses.Response{
+func SignInMapper(data *entities.AuthenticationEntity) responses.ResponseModel[responses.AuthenticationResponseModel] {
+	return responses.ResponseModel[responses.AuthenticationResponseModel]{
 		IsSuccess: true,
 		Data: responses.AuthenticationResponseModel{
 			Id:           data.User.Id,

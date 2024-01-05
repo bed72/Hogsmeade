@@ -8,7 +8,7 @@ echo "
 |  Running Unit Tests... 📌 |
 +===========================+
 "
-go test ./tests/infrastructure/*
+go test ./tests/unit/*
 echo ""
 # Verificar o status de saída dos testes
 if [ $? -eq 0 ]; then

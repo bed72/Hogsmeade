@@ -1,4 +1,4 @@
-package handlers_test
+package repositories_test
 
 import (
 	"testing"
@@ -51,9 +51,8 @@ var _ = Describe("Authentication Repository", func() {
 	})
 
 	Context("Should validate the sign in return", func() {
-
-		It("With failure return", func() {
-			ResponderMock(StatusBadRequest, SIGN_IN_URL, "authentication_failure", MethodPost)
+		It("With error return", func() {
+			ResponderMock(StatusBadRequest, SIGN_IN_URL, "authentication_error", MethodPost)
 
 			success, failure, err := repository.SignIn(SIGN_IN_URL, RegisteredAccountMock())
 
@@ -63,6 +62,18 @@ var _ = Describe("Authentication Repository", func() {
 			Expect(failure.Message).To(BeNil())
 			Expect(*failure.Error).To(Equal("invalid_grant"))
 			Expect(*failure.Description).To(Equal("Invalid login credentials"))
+		})
+		It("With unexpected error return", func() {
+			ResponderMock(StatusBadRequest, SIGN_IN_URL, "authentication_unexpected_error", MethodPost)
+
+			success, failure, err := repository.SignIn(SIGN_IN_URL, RegisteredAccountMock())
+
+			Expect(err).To(BeNil())
+			Expect(success).To(BeNil())
+
+			Expect(failure.Message).To(BeNil())
+			Expect(failure.Error).To(BeNil())
+			Expect(failure.Description).To(BeNil())
 		})
 		It("With succefful return", func() {
 			ResponderMock(StatusOK, SIGN_IN_URL, "authentication_success", MethodPost)

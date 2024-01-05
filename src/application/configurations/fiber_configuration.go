@@ -16,6 +16,5 @@ func FiberMiddwaresConfiguration(app *fiber.App) {
 func FiberConfiguration() fiber.Config {
 	return fiber.Config{
 		AppName: "OhhFerta",
-		// ErrorHandler: errorHandler,
 	}
 }

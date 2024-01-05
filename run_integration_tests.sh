@@ -15,7 +15,7 @@ echo "
 "
 echo ""
 
-go test ./tests/application/*
+go test ./tests/integration/*
 echo ""
 
 if [ $? -eq 0 ]; then
