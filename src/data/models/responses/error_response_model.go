@@ -7,7 +7,6 @@ type (
 	}
 
 	ValidatorResponseModel struct {
-		Failure     bool
 		FailedField string
 		Tag         string
 		Value       interface{}

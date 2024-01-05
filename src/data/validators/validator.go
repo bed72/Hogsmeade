@@ -25,7 +25,7 @@ func New(validator *validator.Validate) Validator {
 }
 
 func (v *validators) HasErrors(data interface{}) []responses.ErrorResponseModel {
-	if errs := v.validate(data); len(errs) > 0 && errs[0].Failure {
+	if errs := v.validate(data); len(errs) > 0 {
 		errors := make([]responses.ErrorResponseModel, 0)
 
 		for _, err := range errs {
@@ -51,7 +51,6 @@ func (v *validators) validate(data interface{}) []responses.ValidatorResponseMod
 	if failures != nil {
 		for _, err := range failures.(validator.ValidationErrors) {
 			var element responses.ValidatorResponseModel
-			element.Failure = true
 			element.Tag = err.Tag()
 			element.Value = err.Value()
 			element.FailedField = err.Field()
