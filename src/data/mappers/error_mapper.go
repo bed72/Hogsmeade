@@ -5,10 +5,6 @@ import (
 	"github.com/bed72/oohferta/src/domain/entities"
 )
 
-var (
-	isSuccess = false
-)
-
 func ErrorDefaultMapper(data error) responses.ResponseModel[responses.ErrorResponseModel] {
 	message := "Oops! Algo deu um passeio fora dos trilhos."
 	description := "Parece que algo deu errado. Relaxa por um momento, logo estaremos de volta nos trilhos."
@@ -18,7 +14,7 @@ func ErrorDefaultMapper(data error) responses.ResponseModel[responses.ErrorRespo
 	}
 
 	return responses.ResponseModel[responses.ErrorResponseModel]{
-		IsSuccess: isSuccess,
+		IsSuccess: false,
 		Data: responses.ErrorResponseModel{
 			Message:     message,
 			Description: description,
@@ -28,7 +24,7 @@ func ErrorDefaultMapper(data error) responses.ResponseModel[responses.ErrorRespo
 
 func ErrorsMapper(data []responses.ErrorResponseModel) responses.ResponseModel[[]responses.ErrorResponseModel] {
 	return responses.ResponseModel[[]responses.ErrorResponseModel]{
-		IsSuccess: isSuccess,
+		IsSuccess: false,
 		Data:      data,
 	}
 }
@@ -46,7 +42,7 @@ func ErrorMapper(data *entities.ErrorEntity) responses.ResponseModel[responses.E
 	}
 
 	return responses.ResponseModel[responses.ErrorResponseModel]{
-		IsSuccess: isSuccess,
+		IsSuccess: false,
 		Data: responses.ErrorResponseModel{
 			Message:     message,
 			Description: description,

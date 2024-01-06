@@ -22,9 +22,11 @@ func New(request clients.RequestClient) AuthenticationRepository {
 	}
 }
 
-func (r *authenticationRepository) SignIn(url string, body requests.SignUpRequestModel) (*entities.AuthenticationEntity, *entities.ErrorEntity, error) {
+func (r *authenticationRepository) SignIn(
+	url string,
+	body requests.SignUpRequestModel,
+) (*entities.AuthenticationEntity, *entities.ErrorEntity, error) {
 	response, err := r.request.Request().SetBody(body).Post(url)
-
 	if err != nil {
 		return nil, nil, err
 	}

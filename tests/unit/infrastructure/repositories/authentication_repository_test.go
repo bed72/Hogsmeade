@@ -52,9 +52,9 @@ var _ = Describe("Authentication Repository", func() {
 
 	Context("Should validate the sign in return", func() {
 		It("With error return", func() {
-			ResponderMock(StatusBadRequest, SIGN_IN_URL, "authentication_error", MethodPost)
+			ResponderMock(StatusBadRequest, SignInURL, "authentication_error", MethodPost)
 
-			success, failure, err := repository.SignIn(SIGN_IN_URL, RegisteredAccountMock())
+			success, failure, err := repository.SignIn(SignInURL, RegisteredAccountMock())
 
 			Expect(err).To(BeNil())
 			Expect(success).To(BeNil())
@@ -64,9 +64,9 @@ var _ = Describe("Authentication Repository", func() {
 			Expect(*failure.Description).To(Equal("Invalid login credentials"))
 		})
 		It("With unexpected error return", func() {
-			ResponderMock(StatusBadRequest, SIGN_IN_URL, "authentication_unexpected_error", MethodPost)
+			ResponderMock(StatusBadRequest, SignInURL, "authentication_unexpected_error", MethodPost)
 
-			success, failure, err := repository.SignIn(SIGN_IN_URL, RegisteredAccountMock())
+			success, failure, err := repository.SignIn(SignInURL, RegisteredAccountMock())
 
 			Expect(err).To(BeNil())
 			Expect(success).To(BeNil())
@@ -76,9 +76,9 @@ var _ = Describe("Authentication Repository", func() {
 			Expect(failure.Description).To(BeNil())
 		})
 		It("With succefful return", func() {
-			ResponderMock(StatusOK, SIGN_IN_URL, "authentication_success", MethodPost)
+			ResponderMock(StatusOK, SignInURL, "authentication_success", MethodPost)
 
-			success, failure, err := repository.SignIn(SIGN_IN_URL, RegisteredAccountMock())
+			success, failure, err := repository.SignIn(SignInURL, RegisteredAccountMock())
 
 			Expect(err).To(BeNil())
 			Expect(failure).To(BeNil())
@@ -88,7 +88,7 @@ var _ = Describe("Authentication Repository", func() {
 			Expect(success.AccessToken).To(Equal("eyJhbGciOi..."))
 			Expect(success.RefreshToken).To(Equal("eyJhbGciOi..."))
 			Expect(success.User.Email).To(Equal("email@email.com"))
-			Expect(success.User.Id.Value()).To(Equal("69131ddb-9d69-4643-b352-dc56f3f68588"))
+			Expect(success.User.ID.Value()).To(Equal("69131ddb-9d69-4643-b352-dc56f3f68588"))
 		})
 	})
 })

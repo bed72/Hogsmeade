@@ -11,7 +11,6 @@ var (
 	ValidFakeEmailMock      = "exemple@exemple.com"
 	ValidFakePasswordMock   = "safe_password_ooh_ferta"
 
-	// URLs
 	AuthenticationURL = "http://localhost:3000/v1/authentication"
 )
 

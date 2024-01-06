@@ -9,7 +9,7 @@ func SignInMapper(data *entities.AuthenticationEntity) responses.ResponseModel[r
 	return responses.ResponseModel[responses.AuthenticationResponseModel]{
 		IsSuccess: true,
 		Data: responses.AuthenticationResponseModel{
-			Id:           data.User.Id,
+			Id:           data.User.ID,
 			ExpiresIn:    data.ExpiresIn,
 			Email:        data.User.Email,
 			AccessToken:  data.AccessToken,

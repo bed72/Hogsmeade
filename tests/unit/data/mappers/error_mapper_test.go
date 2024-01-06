@@ -28,12 +28,12 @@ var _ = Describe("Error Mapper", func() {
 			Expect(data.Data.Description).To(Equal("Parece que algo deu errado. Relaxa por um momento, logo estaremos de volta nos trilhos."))
 		})
 		It("With error", func() {
-			data := mappers.ErrorDefaultMapper(errors.New("Error mock."))
+			data := mappers.ErrorDefaultMapper(errors.New("error mock"))
 
 			Expect(data.IsSuccess).To(BeFalse())
 
 			Expect(data.Data.Message).To(Equal("Oops! Algo deu um passeio fora dos trilhos."))
-			Expect(data.Data.Description).To(Equal("Error mock."))
+			Expect(data.Data.Description).To(Equal("error mock"))
 		})
 	})
 	Context("Should map the errors, method [ErrorMapper]", func() {

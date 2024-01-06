@@ -32,21 +32,20 @@ func (h *authenticationHandler) SignIn(ctx *fiber.Ctx) error {
 	body := &requests.SignUpRequestModel{}
 
 	if err := ctx.BodyParser(body); err != nil {
-		return ErrorHandler(ctx, constants.StatusUnprocessableEntity, mappers.ErrorDefaultMapper(err))
+		return ctx.Status(constants.StatusUnprocessableEntity).JSON(mappers.ErrorDefaultMapper(err))
 	}
 
-	errs := h.validator.HasErrors(body)
-	if errs != nil {
-		return ErrorHandler(ctx, constants.StatusUnprocessableEntity, mappers.ErrorsMapper(errs))
+	if errs := h.validator.HasErrors(body); errs != nil {
+		return ctx.Status(constants.StatusUnprocessableEntity).JSON(mappers.ErrorsMapper(errs))
 	}
 
-	success, error, err := h.repository.SignIn(constants.SIGN_IN_URL, *body)
+	success, error, err := h.repository.SignIn(constants.SignInURL, *body)
 	if error != nil {
-		return ErrorHandler(ctx, constants.StatusBadRequest, mappers.ErrorMapper(error))
+		return ctx.Status(constants.StatusBadRequest).JSON(mappers.ErrorMapper(error))
 	}
 	if err != nil {
-		return ErrorHandler(ctx, constants.StatusBadRequest, mappers.ErrorDefaultMapper(err))
+		return ctx.Status(constants.StatusBadRequest).JSON(mappers.ErrorDefaultMapper(err))
 	}
 
-	return SuccessHandler(ctx, constants.StatusOK, mappers.SignInMapper(success))
+	return ctx.Status(constants.StatusOK).JSON(mappers.SignInMapper(success))
 }

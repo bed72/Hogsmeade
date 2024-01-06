@@ -10,6 +10,6 @@ type AuthenticationEntity struct {
 }
 
 type UserEntity struct {
-	Id    uuid.UUID `json:"id"`
+	ID    uuid.UUID `json:"id"`
 	Email string    `json:"email"`
 }
